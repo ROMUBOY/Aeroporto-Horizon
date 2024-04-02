@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.Entidades;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {        
+    [Authorize]
     public class PassagemController : BaseController
     {   
         public PassagemController(DataContext context) : base (context)
@@ -26,6 +28,7 @@ namespace API.Controllers
 
         // GET: api/Passagem/00000000000
         [HttpGet("Passageiro/{cpf}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Passagem>>> ListarPassagensPassageiro(string cpf)
         {
             return await _context.Passagens.Where(p => p.Cpf == cpf).ToListAsync();
@@ -89,6 +92,7 @@ namespace API.Controllers
 
         // POST: api/Passagem        
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Passagem>> CriarPassagem(Passagem passagem)
         {            
             var voo = await _context.Voos.FindAsync(passagem.VooId);
@@ -118,6 +122,7 @@ namespace API.Controllers
 
         // DELETE: api/Passagem/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeletaPassagem(int id)
         {
             var passagem = await _context.Passagens.FindAsync(id);

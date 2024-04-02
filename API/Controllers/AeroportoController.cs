@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.Entidades;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Authorize]
     public class AeroportoController : BaseController
     {
 
@@ -20,14 +20,14 @@ namespace API.Controllers
         }
 
         // GET: api/Aeroporto
-        //[HttpGet]
-        // public async Task<ActionResult<IEnumerable<Aeroporto>>> ListarAeroportos()
-        // {
-        //     return await _context.Aeroportos.ToListAsync();
-        // }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Aeroporto>>> ListarAeroportos()
+        {
+            return await _context.Aeroportos.ToListAsync();
+        }
 
         // GET: api/Aeroporto/busca
-        [HttpGet("{busca?}")]
+        [HttpGet("{busca}")]
         public async Task<ActionResult<IEnumerable<Aeroporto>>> ListarAeroportos(string? busca)
         {            
             if (String.IsNullOrEmpty(busca))

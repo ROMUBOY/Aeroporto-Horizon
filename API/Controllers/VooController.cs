@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.Entidades;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Authorize]
     public class VooController : BaseController
     {
         public VooController(DataContext context) : base (context)
@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
         // GET: api/Voo
-        [HttpGet]
+        [HttpGet]        
         public async Task<ActionResult<IEnumerable<Voo>>> ListarVoos()
         {
             DateTime dataAtual = DateTime.Now;
@@ -28,6 +28,7 @@ namespace API.Controllers
 
 
         [HttpGet("Disponiveis")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Voo>>> ListarVoosDisponiveis()
         {
             DateTime dataAtual = DateTime.Now;
@@ -35,7 +36,7 @@ namespace API.Controllers
         }
 
         // GET: api/Voo/Passageiros/5
-        [HttpGet("Passageiros/{id}")]
+        [HttpGet("Passageiros/{id}")]        
         public async Task<ActionResult<IEnumerable<string>>> ListarVooPassageiros(int id)
         {
             return await _context.Passagens.Where(P => P.VooId == id).Select(p => p.Nome).ToListAsync();
@@ -43,6 +44,7 @@ namespace API.Controllers
 
         // GET: api/Voo/valor
         [HttpGet("Filtros")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Voo>>> ListarVoos(DateTime partida, DateTime chegada,int aeroportoId,float valor = 0f)
         {
             return await _context.Voos.Where(
@@ -56,7 +58,7 @@ namespace API.Controllers
 
         // PUT: api/Voo/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}")]        
         public async Task<IActionResult> EditarVoo(int id, Voo voo)
         {
             if (id != voo.Id)
@@ -102,7 +104,7 @@ namespace API.Controllers
 
         // POST: api/Voo
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost]        
         public async Task<ActionResult<Voo>> CriarVoo(Voo voo)
         {            
             if(!DatasValidas(voo))
@@ -127,7 +129,7 @@ namespace API.Controllers
         }
 
         // DELETE: api/Voo/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")]        
         public async Task<IActionResult> DeletarVoo(int id)
         {
             var voo = await _context.Voos.FindAsync(id);

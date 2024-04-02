@@ -5,19 +5,27 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entidades;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {    
-    public class LoginController : BaseController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LoginController : ControllerBase
     {
-        public LoginController(DataContext context) : base (context)
-        {            
+        private readonly DataContext _context;
+        private readonly ITokenService _tokenService;
+        public LoginController(DataContext context, ITokenService tokenService) 
+        {           
+            _tokenService = tokenService; 
+            _context = context;
+            
         }
 
         [HttpPost]
-        public async Task<ActionResult<Usuario>> Login(LoginDto loginDto)
+        public async Task<ActionResult<UsuarioDto>> Login(LoginDto loginDto)
         {
             var usuario = await _context.Usuarios.SingleOrDefaultAsync(x =>
             x.Email == loginDto.Email);
@@ -29,7 +37,11 @@ namespace API.Controllers
                 return Unauthorized("Email ou senha incorreto.");
             }
 
-            return usuario;
+            return new UsuarioDto
+            {
+                Email = usuario.Email,
+                Token = _tokenService.CreateToken(usuario)
+            };
         }
     }
 }
