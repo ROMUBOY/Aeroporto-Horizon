@@ -27,8 +27,12 @@ namespace API.Entidades
         [Required(ErrorMessage = "Campo Valor é obrigatório")]        
         public float Valor { get; set; }
 
-        [Required(ErrorMessage = "Campo Aeroporto é obrigatório")]        
+        [Required(ErrorMessage = "Campo Aeroporto de origem é obrigatório")]        
         public int AeroportoId { get; set; }
-        public Aeroporto Aeroporto { get; set; }
+        public Aeroporto? Aeroporto { get; set; }
+
+        [Required(ErrorMessage = "Campo Aeroporto de destino é obrigatório")]        
+        public int AeroportoChegadaId { get; set; }
+        public Aeroporto? AeroportoChegada { get; set; }
     }
 }

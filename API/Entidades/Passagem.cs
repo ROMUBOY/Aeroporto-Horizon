@@ -28,10 +28,12 @@ namespace API.Entidades
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Campo Voo é obrigatório")]        
-        public int VooId { get; set; }
-        public Voo Voo { get; set; }
+        public float Valor { get; set; }
 
-        public int? BagagemId { get; set; }
-        public Bagagem? Bagagem { get; set; }
+        [Required(ErrorMessage = "Campo Voo é obrigatório")]        
+        public int VooId { get; set; }
+        public Voo? Voo { get; set; }
+
+        public string? BagagemCodigo { get; set; }
     }
 }

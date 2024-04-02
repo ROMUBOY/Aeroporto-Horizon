@@ -9,8 +9,7 @@ namespace API.Data
         {            
         }
 
-        public DbSet<Aeroporto> Aeroportos { get; set; }
-        public DbSet<Bagagem> Bagagens { get; set; }        
+        public DbSet<Aeroporto> Aeroportos { get; set; }             
         public DbSet<Passagem> Passagens { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Voo> Voos { get; set; }        

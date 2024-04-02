@@ -7,30 +7,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.Entidades;
+using System.Text;
 
 namespace API.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PassagemController : ControllerBase
-    {
-        private readonly DataContext _context;
-
-        public PassagemController(DataContext context)
-        {
-            _context = context;
+{        
+    public class PassagemController : BaseController
+    {   
+        public PassagemController(DataContext context) : base (context)
+        {            
         }
 
         // GET: api/Passagem
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Passagem>>> GetPassagens()
+        public async Task<ActionResult<IEnumerable<Passagem>>> ListarPassagens()
         {
             return await _context.Passagens.ToListAsync();
         }
 
+        // GET: api/Passagem/00000000000
+        [HttpGet("Passageiro/{cpf}")]
+        public async Task<ActionResult<IEnumerable<Passagem>>> ListarPassagensPassageiro(string cpf)
+        {
+            return await _context.Passagens.Where(p => p.Cpf == cpf).ToListAsync();
+        }
+
         // GET: api/Passagem/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Passagem>> GetPassagem(int id)
+        public async Task<ActionResult<Passagem>> RetornarPassagem(int id)
         {
             var passagem = await _context.Passagens.FindAsync(id);
 
@@ -42,14 +45,25 @@ namespace API.Controllers
             return passagem;
         }
 
-        // PUT: api/Passagem/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/Passagem/5        
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPassagem(int id, Passagem passagem)
+        public async Task<IActionResult> EditarPassagem(int id, Passagem passagem)
         {
             if (id != passagem.Id)
             {
                 return BadRequest();
+            }
+
+            var voo = await _context.Voos.FindAsync(passagem.VooId);
+
+            if(voo == null)
+            {
+                return BadRequest("Voo cancelado, desculpe-nos o transtorno.");
+            }
+
+            if(voo.QuantidadeAcentos == 0)
+            {
+                return BadRequest("Sem acento disponível, desculpe-nos o transtorno.");
             }
 
             _context.Entry(passagem).State = EntityState.Modified;
@@ -73,25 +87,53 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Passagem
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/Passagem        
         [HttpPost]
-        public async Task<ActionResult<Passagem>> PostPassagem(Passagem passagem)
-        {
+        public async Task<ActionResult<Passagem>> CriarPassagem(Passagem passagem)
+        {            
+            var voo = await _context.Voos.FindAsync(passagem.VooId);
+
+            if(voo == null)
+            {
+                return BadRequest("Voo cancelado, desculpe-nos o transtorno.");
+            }
+
+            if(voo.QuantidadeAcentos == 0)
+            {
+                return BadRequest("Sem acento disponível, desculpe-nos o transtorno.");
+            }
+
+            voo.QuantidadeAcentos--;
+            _context.Entry(voo).State = EntityState.Modified;
+
+            passagem.Valor = CalcularValorPassagem(passagem, voo);
+
+            passagem.BagagemCodigo = GerarCodigoBagagem();
+
             _context.Passagens.Add(passagem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPassagem", new { id = passagem.Id }, passagem);
+            return CreatedAtAction("RetornarPassagem", new { id = passagem.Id }, passagem);
         }
 
         // DELETE: api/Passagem/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePassagem(int id)
+        public async Task<IActionResult> DeletaPassagem(int id)
         {
             var passagem = await _context.Passagens.FindAsync(id);
+                        
             if (passagem == null)
             {
                 return NotFound();
+            }
+
+            var voo = await _context.Voos.FindAsync(passagem.VooId);
+
+            if(voo != null)
+            {
+                voo.QuantidadeAcentos++;                
+
+                _context.Entry(voo).State = EntityState.Modified;
             }
 
             _context.Passagens.Remove(passagem);
@@ -103,6 +145,33 @@ namespace API.Controllers
         private bool PassagemExists(int id)
         {
             return _context.Passagens.Any(e => e.Id == id);
+        }
+
+        private float CalcularValorPassagem(Passagem passagem, Voo voo)
+        {
+            if(passagem.BagagemCodigo != null)
+            {
+                return passagem.Valor + passagem.Valor * 0.1f;
+            }
+            else
+            {
+                return passagem.Valor;
+            }
+        }
+
+        private string GerarCodigoBagagem()
+        {
+            Random random = new Random();
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder codeBuilder = new StringBuilder(12);
+
+            for (int i = 0; i < 12; i++)
+            {
+                codeBuilder.Append(chars[random.Next(12)]);
+            }
+
+            return codeBuilder.ToString();
         }
     }
 }

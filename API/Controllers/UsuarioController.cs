@@ -12,25 +12,22 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuarioController : ControllerBase
+    public class UsuarioController : BaseController
     {
-        private readonly DataContext _context;
-
-        public UsuarioController(DataContext context)
-        {
-            _context = context;
+        public UsuarioController(DataContext context) : base (context)
+        {            
         }
 
         // GET: api/Usuario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuarios()
         {
             return await _context.Usuarios.ToListAsync();
         }
 
         // GET: api/Usuario/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public async Task<ActionResult<Usuario>> RetornarUsuario(int id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
 
@@ -45,11 +42,16 @@ namespace API.Controllers
         // PUT: api/Usuario/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        public async Task<IActionResult> EditarUsuario(int id, Usuario usuario)
         {
             if (id != usuario.Id)
             {
-                return BadRequest();
+                return BadRequest("Ocorreu um erro no processo.");
+            }
+
+            if(ExisteEmail(usuario))
+            {
+                return BadRequest( "Já foi cadastrado um usuário com este E-mail.");
             }
 
             _context.Entry(usuario).State = EntityState.Modified;
@@ -62,7 +64,7 @@ namespace API.Controllers
             {
                 if (!UsuarioExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Usuário não encontrado");
                 }
                 else
                 {
@@ -77,7 +79,12 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
-        {
+        {            
+            if(ExisteEmail(usuario))
+            {
+                return BadRequest( "Já foi cadastrado um usuário com este E-mail.");
+            }
+
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
@@ -103,6 +110,11 @@ namespace API.Controllers
         private bool UsuarioExists(int id)
         {
             return _context.Usuarios.Any(e => e.Id == id);
+        }
+
+        private bool ExisteEmail(Usuario usuario)
+        {
+            return _context.Usuarios.Any(u => u.Email == usuario.Email && u.Id != usuario.Id);
         }
     }
 }

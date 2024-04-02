@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240402200904_ValorPassagemAeroportoChegadaVoo")]
+    partial class ValorPassagemAeroportoChegadaVoo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,6 +53,19 @@ namespace API.Migrations
                     b.ToTable("Aeroportos");
                 });
 
+            modelBuilder.Entity("API.Entidades.Bagagem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bagagens");
+                });
+
             modelBuilder.Entity("API.Entidades.Passagem", b =>
                 {
                     b.Property<int>("Id")
@@ -58,8 +74,8 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BagagemCodigo")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BagagemId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Cpf")
                         .IsRequired()
@@ -86,6 +102,8 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BagagemId");
 
                     b.HasIndex("VooId");
 
@@ -160,11 +178,17 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entidades.Passagem", b =>
                 {
+                    b.HasOne("API.Entidades.Bagagem", "Bagagem")
+                        .WithMany()
+                        .HasForeignKey("BagagemId");
+
                     b.HasOne("API.Entidades.Voo", "Voo")
                         .WithMany()
                         .HasForeignKey("VooId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Bagagem");
 
                     b.Navigation("Voo");
                 });
