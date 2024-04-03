@@ -21,6 +21,7 @@ namespace API.Controllers
 
         // GET: api/Aeroporto
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Aeroporto>>> ListarAeroportos()
         {
             return await _context.Aeroportos.ToListAsync();
