@@ -1,7 +1,10 @@
-<h1>{{title}}</h1>
+<app-nav></app-nav>
 
-<ul>
-  <li *ngFor="let aeroporto of aeroportos">
-    {{aeroporto.id}} - {{aeroporto.nome}} {{aeroporto.cidade}} - {{aeroporto.iata}}
-  </li>
-</ul>
+<div class="container" style="margin-top: 100px;">
+  <ul>
+    <li *ngFor="let aeroporto of aeroportos">
+      {{aeroporto.id}} - {{aeroporto.nome}} - {{aeroporto.cidade}} - {{aeroporto.iata}}
+    </li>
+  </ul>
+</div>
+
