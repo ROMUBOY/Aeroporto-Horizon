@@ -9,7 +9,7 @@ namespace API.Enums
     public enum VooClasse
     {
         [Description("Primeira Classe")]
-        PrimeiraClasse,
-        Executiva
+        PrimeiraClasse = 0,
+        Executiva = 1
     }
 }

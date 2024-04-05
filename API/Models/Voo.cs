@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using API.Enums;
 
-namespace API.Entidades
+namespace API.Models
 {
     public class Voo
     {
