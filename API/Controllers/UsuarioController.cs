@@ -22,14 +22,14 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuarios()
         {
-            return await _context.Usuarios.ToListAsync();
+            return await this._context.Usuarios.ToListAsync();
         }
 
         // GET: api/Usuario/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> RetornarUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await this._context.Usuarios.FindAsync(id);
 
             if (usuario == null)
             {
@@ -54,11 +54,11 @@ namespace API.Controllers
                 return BadRequest( "Já foi cadastrado um usuário com este E-mail.");
             }
 
-            _context.Entry(usuario).State = EntityState.Modified;
+            this._context.Entry(usuario).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await this._context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -85,8 +85,8 @@ namespace API.Controllers
                 return BadRequest( "Já foi cadastrado um usuário com este E-mail.");
             }
 
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
+            this._context.Usuarios.Add(usuario);
+            await this._context.SaveChangesAsync();
 
             return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
         }
@@ -101,20 +101,20 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
+            this._context.Usuarios.Remove(usuario);
+            await this._context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool UsuarioExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            return this._context.Usuarios.Any(e => e.Id == id);
         }
 
         private bool ExisteEmail(Usuario usuario)
         {
-            return _context.Usuarios.Any(u => u.Email == usuario.Email && u.Id != usuario.Id);
+            return this._context.Usuarios.Any(u => u.Email == usuario.Email && u.Id != usuario.Id);
         }
     }
 }

@@ -19,15 +19,15 @@ namespace API.Controllers
         private readonly ITokenService _tokenService;
         public LoginController(DataContext context, ITokenService tokenService) 
         {           
-            _tokenService = tokenService; 
-            _context = context;
+            this._tokenService = tokenService; 
+            this._context = context;
             
         }
 
         [HttpPost]
         public async Task<ActionResult<UsuarioDto>> Login(LoginDto loginDto)
         {
-            var usuario = await _context.Usuarios.SingleOrDefaultAsync(x =>
+            var usuario = await this._context.Usuarios.SingleOrDefaultAsync(x =>
             x.Email == loginDto.Email);
 
             if(usuario == null) return Unauthorized("Email ou senha incorreto.");

@@ -13,7 +13,7 @@ namespace API.Services
 
         public TokenService(IConfiguration config)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+            this._key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
 
         public string CreateToken(Usuario usuario)
@@ -23,7 +23,7 @@ namespace API.Services
                 new Claim(JwtRegisteredClaimNames.NameId, usuario.Email)
             };
 
-            SigningCredentials creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+            SigningCredentials creds = new SigningCredentials(this._key, SecurityAlgorithms.HmacSha512Signature);
 
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {

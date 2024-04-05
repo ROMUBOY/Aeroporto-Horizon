@@ -23,7 +23,7 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<Voo>>> ListarVoos()
         {
             DateTime dataAtual = DateTime.Now;
-            return await _context.Voos.Where(v => v.Partida > dataAtual).ToListAsync();
+            return await this._context.Voos.Where(v => v.Partida > dataAtual).ToListAsync();
         }
 
 
@@ -32,14 +32,14 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<Voo>>> ListarVoosDisponiveis()
         {
             DateTime dataAtual = DateTime.Now;
-            return await _context.Voos.Where(v => v.QuantidadeAcentos > 0 && v.Partida > dataAtual).ToListAsync();
+            return await this._context.Voos.Where(v => v.QuantidadeAcentos > 0 && v.Partida > dataAtual).ToListAsync();
         }
 
         // GET: api/Voo/Passageiros/5
         [HttpGet("Passageiros/{id}")]        
         public async Task<ActionResult<IEnumerable<string>>> ListarVooPassageiros(int id)
         {
-            return await _context.Passagens.Where(P => P.VooId == id).Select(p => p.Nome).ToListAsync();
+            return await this._context.Passagens.Where(P => P.VooId == id).Select(p => p.Nome).ToListAsync();
         }
 
         // GET: api/Voo/valor
@@ -47,7 +47,7 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Voo>>> ListarVoos(DateTime partida, DateTime chegada,int aeroportoId,float valor = 0f)
         {
-            return await _context.Voos.Where(
+            return await this._context.Voos.Where(
                                         v => v.Partida == partida &&
                                         v.Chegada == partida && 
                                         (v.AeroportoId == aeroportoId || aeroportoId == 0) &&
@@ -81,7 +81,7 @@ namespace API.Controllers
                 return BadRequest("Valor do voo não pode ser 0.");
             }
                         
-            _context.Entry(voo).State = EntityState.Modified;
+            this._context.Entry(voo).State = EntityState.Modified;
 
             try
             {
@@ -122,8 +122,8 @@ namespace API.Controllers
                 return BadRequest("Valor do voo não pode ser 0.");
             }
 
-            _context.Voos.Add(voo);
-            await _context.SaveChangesAsync();
+            this._context.Voos.Add(voo);
+            await this._context.SaveChangesAsync();
 
             return CreatedAtAction("ListarVoos", new { id = voo.Id }, voo);
         }
@@ -138,15 +138,15 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            _context.Voos.Remove(voo);
-            await _context.SaveChangesAsync();
+            this._context.Voos.Remove(voo);
+            await this._context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool VooExists(int id)
         {
-            return _context.Voos.Any(e => e.Id == id);
+            return this._context.Voos.Any(e => e.Id == id);
         }
 
         private bool DatasValidas (Voo voo)

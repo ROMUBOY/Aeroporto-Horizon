@@ -11,7 +11,7 @@ namespace API.Controllers
 
         public BaseController(DataContext context)
         {
-            _context = context;
+            this._context = context;
         }
     }
 }

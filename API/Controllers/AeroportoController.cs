@@ -24,7 +24,7 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Aeroporto>>> ListarAeroportos()
         {
-            return await _context.Aeroportos.ToListAsync();
+            return await this._context.Aeroportos.ToListAsync();
         }
 
         // GET: api/Aeroporto/busca
@@ -33,10 +33,10 @@ namespace API.Controllers
         {            
             if (String.IsNullOrEmpty(busca))
             {
-                return await _context.Aeroportos.ToListAsync();
+                return await this._context.Aeroportos.ToListAsync();
             }
 
-            return await _context.Aeroportos
+            return await this._context.Aeroportos
                                  .Where(
                                         a => a.Nome.Contains(busca) || 
                                         a.Iata.Contains(busca) || 
@@ -71,11 +71,11 @@ namespace API.Controllers
                 );
             }
 
-            _context.Entry(aeroporto).State = EntityState.Modified;
+            this._context.Entry(aeroporto).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await this._context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -113,8 +113,8 @@ namespace API.Controllers
                 );
             }
 
-            _context.Aeroportos.Add(aeroporto);
-            await _context.SaveChangesAsync();
+            this._context.Aeroportos.Add(aeroporto);
+            await this._context.SaveChangesAsync();
 
             return CreatedAtAction("ListarAeroportos", new { id = aeroporto.Id }, aeroporto);
         }
@@ -123,26 +123,26 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletarAeroporto(int id)
         {
-            var aeroporto = await _context.Aeroportos.FindAsync(id);
+            var aeroporto = await this._context.Aeroportos.FindAsync(id);
             if (aeroporto == null)
             {
                 return NotFound();
             }
 
-            _context.Aeroportos.Remove(aeroporto);
-            await _context.SaveChangesAsync();
+            this._context.Aeroportos.Remove(aeroporto);
+            await this._context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool AeroportoExists(int id)
         {
-            return _context.Aeroportos.Any(e => e.Id == id);
+            return this._context.Aeroportos.Any(e => e.Id == id);
         }
 
         private bool ExisteIata(Aeroporto aeroporto)
         {
-            return _context.Aeroportos.Any(a => a.Iata == aeroporto.Iata && a.Id != aeroporto.Id);
+            return this._context.Aeroportos.Any(a => a.Iata == aeroporto.Iata && a.Id != aeroporto.Id);
         }
 
         private bool ExisteCidade(Aeroporto aeroporto)

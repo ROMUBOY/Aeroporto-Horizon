@@ -23,7 +23,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Passagem>>> ListarPassagens()
         {
-            return await _context.Passagens.ToListAsync();
+            return await this._context.Passagens.ToListAsync();
         }
 
         // GET: api/Passagem/00000000000
@@ -31,14 +31,14 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Passagem>>> ListarPassagensPassageiro(string cpf)
         {
-            return await _context.Passagens.Where(p => p.Cpf == cpf).ToListAsync();
+            return await this._context.Passagens.Where(p => p.Cpf == cpf).ToListAsync();
         }
 
         // GET: api/Passagem/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Passagem>> RetornarPassagem(int id)
         {
-            var passagem = await _context.Passagens.FindAsync(id);
+            var passagem = await this._context.Passagens.FindAsync(id);
 
             if (passagem == null)
             {
@@ -73,7 +73,7 @@ namespace API.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                await this._context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -95,7 +95,7 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Passagem>> CriarPassagem(Passagem passagem)
         {            
-            var voo = await _context.Voos.FindAsync(passagem.VooId);
+            var voo = await this._context.Voos.FindAsync(passagem.VooId);
 
             if(voo == null)
             {
@@ -108,14 +108,14 @@ namespace API.Controllers
             }
 
             voo.QuantidadeAcentos--;
-            _context.Entry(voo).State = EntityState.Modified;
+            this._context.Entry(voo).State = EntityState.Modified;
 
             passagem.Valor = CalcularValorPassagem(passagem, voo);
 
             passagem.BagagemCodigo = GerarCodigoBagagem();
 
-            _context.Passagens.Add(passagem);
-            await _context.SaveChangesAsync();
+            this._context.Passagens.Add(passagem);
+            await this._context.SaveChangesAsync();
 
             return CreatedAtAction("RetornarPassagem", new { id = passagem.Id }, passagem);
         }
@@ -141,15 +141,15 @@ namespace API.Controllers
                 _context.Entry(voo).State = EntityState.Modified;
             }
 
-            _context.Passagens.Remove(passagem);
-            await _context.SaveChangesAsync();
+            this._context.Passagens.Remove(passagem);
+            await this._context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool PassagemExists(int id)
         {
-            return _context.Passagens.Any(e => e.Id == id);
+            return this._context.Passagens.Any(e => e.Id == id);
         }
 
         private float CalcularValorPassagem(Passagem passagem, Voo voo)
