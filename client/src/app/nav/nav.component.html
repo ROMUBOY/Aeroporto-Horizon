@@ -1,21 +1,24 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Aeroporto Horizon</a>      
+      <a class="navbar-brand" routerLink="/" routerLinkActive="active">Aeroporto Horizon</a>      
       
         <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="contaService.currentUsuario$ | async">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link" routerLink="/aeroportos" routerLinkActive="active">Aeroportos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" routerLink="/voos" routerLinkActive="active">Voos</a>
           </li>
-          <li class="nav-item" (click)="logout()" >
-            <a class="nav-link">Sair</a>
+          <!-- <li class="nav-item" >
+            <a class="nav-link">Passagens</a>
           </li>
+          <li class="nav-item" >
+            <a class="nav-link">Bagagens</a>
+          </li> -->
         </ul>
 
-        <div class="dropdown" *ngIf="contaService.currentUsuario$ | async" dropdown>
-            <a class="dropdown-toggle text-light text-decoratio-none" dropdownToggle>Bem-vindo Gestor</a>
+        <div class="dropdown" *ngIf="contaService.currentUsuario$ | async as usuario" dropdown>
+            <a class="dropdown-toggle text-light text-decoratio-none" dropdownToggle>Bem-vindo {{usuario.email}}</a>
             <div class="dropdown-menu" *dropdownMenu>
                 <a class="dorpdown-item">Editar Perfil</a>
                 <a class="dorpdown-item" (click)="logout()" >Sair</a>
@@ -34,7 +37,7 @@
             class="form-control me-2"
             class="form-control me-2" 
             type="password" placeholder="senha">
-          <button class="btn btn-outline-success" type="submit">Login</button>
+          <button class="btn btn-success" type="submit">Login</button>
         </form>      
     </div>
   </nav>

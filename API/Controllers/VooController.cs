@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class VooController : BaseController
     {
         public VooController(DataContext context) : base (context)

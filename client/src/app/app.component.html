@@ -1,10 +1,6 @@
 <app-nav></app-nav>
 
 <div class="container" style="margin-top: 100px;">
-  <ul>
-    <li *ngFor="let aeroporto of aeroportos">
-      {{aeroporto.id}} - {{aeroporto.nome}} - {{aeroporto.cidade}} - {{aeroporto.iata}}
-    </li>
-  </ul>
+  <router-outlet></router-outlet>
 </div>
 

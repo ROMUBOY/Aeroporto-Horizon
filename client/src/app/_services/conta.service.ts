@@ -13,7 +13,7 @@ export class ContaService {
 
   constructor(private http: HttpClient) { }
 
-  login(model: any)
+  login(model: Usuario)
   {
     return this.http.post<Usuario>(this.baseUrl + 'Login', model).pipe(
       map((response: Usuario) => {
