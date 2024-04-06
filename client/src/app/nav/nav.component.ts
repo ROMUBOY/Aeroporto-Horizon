@@ -23,8 +23,7 @@ export class NavComponent implements OnInit {
 
   login(){
     this.contaService.login(this.model).subscribe({
-      next: () => this.router.navigateByUrl('/aeroportos'),
-      error: error => this.toastr.error(error.error)      
+      next: () => this.router.navigateByUrl('/aeroportos')           
     })
   }
 

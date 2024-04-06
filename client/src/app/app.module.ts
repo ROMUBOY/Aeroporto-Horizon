@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +21,9 @@ import { AeroportoPassageirosComponent } from './aeroporto/aeroporto-passageiros
 import { AeroportoListComponent } from './aeroporto/aeroporto-list/aeroporto-list.component';
 import { ToastrModule } from 'ngx-toastr';
 import { positionElements } from 'ngx-bootstrap/positioning';
+import { ErrorInterceptor } from './_interceptors/error.interceptor';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,9 @@ import { positionElements } from 'ngx-bootstrap/positioning';
     PassagemDeleteComponent,
     VooPassageirosComponent,
     AeroportoPassageirosComponent,
-    AeroportoListComponent
+    AeroportoListComponent,
+    NotFoundComponent,
+    ServerErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +54,9 @@ import { positionElements } from 'ngx-bootstrap/positioning';
       positionClass: 'toast-bottom-right'
     })
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

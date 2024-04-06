@@ -8,6 +8,8 @@ import { PassagemDeleteComponent } from './passagem/passagem-delete/passagem-del
 import { VooRegisterComponent } from './voo/voo-register/voo-register.component';
 import { VooListComponent } from './voo/voo-list/voo-list.component';
 import { authGuard } from './_guards/auth.guard';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 const routes: Routes = [
   {path: '', component : HomeComponent},
@@ -23,7 +25,9 @@ const routes: Routes = [
       {path: 'voo/register', component : VooRegisterComponent}
     ]
   },  
-  {path: '**', component : HomeComponent, pathMatch : 'full'}
+  {path: 'not-found', component: NotFoundComponent},
+  {path: 'server-error', component: ServerErrorComponent},
+  {path: '**', component: NotFoundComponent, pathMatch: 'full'},
 ];
 
 @NgModule({
