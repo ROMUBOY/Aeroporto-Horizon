@@ -1,4 +1,4 @@
-# REST API example application
+# Aeroporto Horizon API
 
 Este projeto consiste em uma API de controle de passagens de voo feita em ASP.NET Core e um client feito em Angular.
 
