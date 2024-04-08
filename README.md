@@ -161,62 +161,72 @@ o espaço depois de Bearer é muito importante.
       }
     ]
 
-## Change a Thing's state
+## Adicionar Voo
 
 ### Request
 
-`PUT /thing/:id/status/changed`
+`POST api/Voo`
 
-    curl -i -H 'Accept: application/json' -X PUT http://localhost:7000/thing/1/status/changed
+### body
+
+    {
+        "id": 0,
+        "partida": "2024-04-08T09:23:36.061Z",
+        "chegada": "2024-04-08T09:23:36.061Z",
+        "vooClasse": 0,
+        "quantidadeAcentos": 0,
+        "valor": 0,
+        "aeroportoId": 0,  
+        "aeroportoChegadaId": 0,  
+    }
 
 ### Response
 
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 40
+    Success
 
-    {"id":1,"name":"Foo","status":"changed"}
+    {
+        "id": 0,
+        "partida": "2024-04-08T09:23:36.061Z",
+        "chegada": "2024-04-08T09:23:36.061Z",
+        "vooClasse": 0,
+        "quantidadeAcentos": 0,
+        "valor": 0,
+        "aeroportoId": 0,  
+        "aeroportoChegadaId": 0,  
+    }
 
-## Get changed Thing
+## Editar Voo
 
 ### Request
 
-`GET /thing/id`
+`PUT api/Voo/id`
 
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/1
+### Voo
+
+    {
+        "id": 0,
+        "partida": "2024-04-08T09:23:36.061Z",
+        "chegada": "2024-04-08T09:23:36.061Z",
+        "vooClasse": 0,
+        "quantidadeAcentos": 0,
+        "valor": 0,
+        "aeroportoId": 0,  
+        "aeroportoChegadaId": 0,  
+    }
 
 ### Response
 
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 40
+    Success
 
-    {"id":1,"name":"Foo","status":"changed"}
-
-## Change a Thing
+## Deletar Voo
 
 ### Request
 
-`PUT /thing/:id`
-
-    curl -i -H 'Accept: application/json' -X PUT -d 'name=Foo&status=changed2' http://localhost:7000/thing/1
-
+`Delete api/Voo/:id`
+    
 ### Response
 
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 41
-
-    {"id":1,"name":"Foo","status":"changed2"}
+    Success    
 
 ## Attempt to change a Thing using partial params
 
@@ -237,128 +247,49 @@ o espaço depois de Bearer é muito importante.
 
     {"id":1,"name":"Foo","status":"changed3"}
 
-## Attempt to change a Thing using invalid params
+## Alterar Passagem
 
 ### Request
 
-`PUT /thing/:id`
+`PUT api/Passagem/:id`
 
-    curl -i -H 'Accept: application/json' -X PUT -d 'id=99&status=changed4' http://localhost:7000/thing/1
+### Body
+
+    {
+      "id": 0,
+      "nome": "string",
+      "cpf": "string",
+      "dataNascimento": "2024-04-08T02:27:12.335Z",
+      "email": "hB2TzslApE6jV1OrS7IwOYWYWGoLd+u_w1KJG1.ARIizn1nSWOa8url04z%.IGlh7oNfSHnpFcUl@3pEETMxy2CQJIe-Kxs0DV71567RT.vMY",
+      "valor": 0,
+      "vooId": 0,              
+      "bagagemCodigo": "string"
+    }
 
 ### Response
 
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 41
+    Success
 
-    {"id":1,"name":"Foo","status":"changed4"}
-
-## Change a Thing using the _method hack
+## Deletar Passagem
 
 ### Request
 
-`POST /thing/:id?_method=POST`
+`Delete api/Passagem/:id`
 
-    curl -i -H 'Accept: application/json' -X POST -d 'name=Baz&_method=PUT' http://localhost:7000/thing/1
+### Body
 
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 41
-
-    {"id":1,"name":"Baz","status":"changed4"}
-
-## Change a Thing using the _method hack in the url
-
-### Request
-
-`POST /thing/:id?_method=POST`
-
-    curl -i -H 'Accept: application/json' -X POST -d 'name=Qux' http://localhost:7000/thing/1?_method=PUT
+    {
+      "id": 0,
+      "nome": "string",
+      "cpf": "string",
+      "dataNascimento": "2024-04-08T02:27:12.335Z",
+      "email": "hB2TzslApE6jV1OrS7IwOYWYWGoLd+u_w1KJG1.ARIizn1nSWOa8url04z%.IGlh7oNfSHnpFcUl@3pEETMxy2CQJIe-Kxs0DV71567RT.vMY",
+      "valor": 0,
+      "vooId": 0,              
+      "bagagemCodigo": "string"
+    }
 
 ### Response
 
-    HTTP/1.1 404 Not Found
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 404 Not Found
-    Connection: close
-    Content-Type: text/html;charset=utf-8
-    Content-Length: 35
+    Success
 
-    {"status":404,"reason":"Not found"}
-
-## Delete a Thing
-
-### Request
-
-`DELETE /thing/id`
-
-    curl -i -H 'Accept: application/json' -X DELETE http://localhost:7000/thing/1/
-
-### Response
-
-    HTTP/1.1 204 No Content
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 204 No Content
-    Connection: close
-
-
-## Try to delete same Thing again
-
-### Request
-
-`DELETE /thing/id`
-
-    curl -i -H 'Accept: application/json' -X DELETE http://localhost:7000/thing/1/
-
-### Response
-
-    HTTP/1.1 404 Not Found
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 404 Not Found
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 35
-
-    {"status":404,"reason":"Not found"}
-
-## Get deleted Thing
-
-### Request
-
-`GET /thing/1`
-
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/1
-
-### Response
-
-    HTTP/1.1 404 Not Found
-    Date: Thu, 24 Feb 2011 12:36:33 GMT
-    Status: 404 Not Found
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 35
-
-    {"status":404,"reason":"Not found"}
-
-## Delete a Thing using the _method hack
-
-### Request
-
-`DELETE /thing/id`
-
-    curl -i -H 'Accept: application/json' -X POST -d'_method=DELETE' http://localhost:7000/thing/2/
-
-### Response
-
-    HTTP/1.1 204 No Content
-    Date: Thu, 24 Feb 2011 12:36:33 GMT
-    Status: 204 No Content
-    Connection: close
