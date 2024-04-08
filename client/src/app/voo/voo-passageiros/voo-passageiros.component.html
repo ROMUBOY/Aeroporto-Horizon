@@ -1,1 +1,52 @@
-<p>voo-passageiros works!</p>
+<h3>Passageiros do Voo</h3>
+
+<div class="row" *ngIf="voo">
+    <div class="col-4">
+        <div class="card">            
+            <div class="card-body">
+                <div>
+                    <strong>Destino:</strong>
+                    <p>{{voo.cidadeDestino}}</p>
+                </div>                
+                <div>
+                    <strong>partida:</strong>
+                    <p>{{voo.cidadePartida }}</p>                    
+                </div>
+                <div>                    
+                    <p>{{voo.partida | date: 'dd/MM/yyyy'}} - {{voo.partida | date: 'HH : mm'}}</p>
+                </div>
+                <div>
+                    <strong>Previsão de chegada:</strong>
+                    <p>{{voo.chegada| date: 'dd/MM/yyyy'}} - {{voo.chegada| date: 'HH : mm'}}</p>
+                </div>
+                <div>
+                    <strong>Classe:</strong>
+                    <p>{{voo.vooClasse}}</p>
+                </div>
+                <div>
+                    <strong>Valor:</strong>
+                    <p>{{voo.valor}}</p>
+                </div>
+                <div>
+                        
+                </div>
+            </div>   
+            <table class="table table-striped table-sm">
+                <thead>
+                  <tr>          
+                    <th scope="col">Nome</th>
+                    <th scope="col">Cpf</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let passageiro of passageiros">
+                      <td>{{passageiro.nome}}</td>
+                      <td>{{passageiro.cpf}}</td>                      
+                  </tr>
+                </tbody>
+              </table>           
+            
+        </div>
+    </div>    
+</div>
+

@@ -1,0 +1,72 @@
+<h3>Compra de passagem</h3>
+
+<div class="row" *ngIf="voo">
+    <div class="col-4">
+        <div class="card">            
+            <div class="card-body">
+                <div>
+                    <strong>Destino:</strong>
+                    <p>{{voo.cidadeDestino}}</p>
+                </div>                
+                <div>
+                    <strong>partida:</strong>
+                    <p>{{voo.cidadePartida }}</p>                    
+                </div>
+                <div>                    
+                    <p>{{voo.partida | date: 'dd/MM/yyyy'}} - {{voo.partida | date: 'HH : mm'}}</p>
+                </div>
+                <div>
+                    <strong>Previsão de chegada:</strong>
+                    <p>{{voo.chegada| date: 'dd/MM/yyyy'}} - {{voo.chegada| date: 'HH : mm'}}</p>
+                </div>
+                <div>
+                    <strong>Classe:</strong>
+                    <p>{{voo.vooClasse}}</p>
+                </div>
+                <div>
+                    <strong>Valor:</strong>
+                    <p>{{voo.valor}}</p>
+                </div>
+                <div>
+                    <form #loginForm="ngForm"  (ngSubmit)="registerPassagem()" autocomplete="off">
+                        <div><input
+                            name="nome"
+                            [(ngModel)]="passagem.nome"
+                            class="form-control" 
+                            type="text" placeholder="Nome">
+                        </div>
+                        <div>
+                            <input 
+                          name="cpf"
+                          [(ngModel)]="passagem.cpf"
+                          class="form-control me-2"
+                          class="form-control me-2" 
+                          type="text" placeholder="CPF">
+                        </div>
+                        
+                          <input 
+                          name="email"
+                          [(ngModel)]="passagem.email"
+                          class="form-control me-2"
+                          class="form-control me-2" 
+                          type="email" placeholder="E-mail">
+                          <input 
+                          name="dataNascimento"
+                          [(ngModel)]="passagem.dataNascimento"
+                          class="form-control me-2"
+                          class="form-control me-2" 
+                          type="datetime-local" placeholder="Data de Nascimentos">                        
+                        <div class="card-footer">
+                            <div class="btn-group d-flex">
+                                <button class="btn btn-primary">Cancelar</button>
+                                <button class="btn btn-success" type="submit">Comprar</button>
+                            </div>
+                        </div>
+                      </form>        
+                </div>
+            </div>   
+                       
+            
+        </div>
+    </div>    
+</div>

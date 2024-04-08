@@ -1,1 +1,20 @@
-<p>passagem-list works!</p>
+<div class="table-responsive small">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>          
+          <th scope="col">Destino</th>
+          <th scope="col">Partida</th>
+          <th scope="col">Parte de:</th>                              
+          <th scope="col"></th> 
+        </tr>
+      </thead>
+      <tbody>        
+        <tr *ngFor="let voucher of vouchers">
+            <td>{{voucher.cidadeDestino}}</td>
+            <td>{{voucher.partida | date: 'dd/MM/yyyy hh:mm'}}</td>
+            <td>{{voucher.cidadePartida}}</td>            
+            <td><button routerLink="/voucher/{{voucher.id}}" class="btn btn-primary"><i class="fa bi-airolane">Voucher</i></button></td>            
+        </tr>
+      </tbody>
+    </table>
+  </div>

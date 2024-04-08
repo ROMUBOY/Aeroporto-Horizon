@@ -2,6 +2,7 @@ import { Component , OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { ContaService } from './_services/conta.service';
 import { Usuario } from './_models/usuario';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-root',
@@ -14,18 +15,9 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient, private contaService : ContaService) {}
   aeroportos: any;
   
-  ngOnInit() : void {
-    this.getAeroportos();
+  ngOnInit() : void {    
     this.setCurrentUsuario();
-  }
-
-  getAeroportos(){
-    this.http.get('http://localhost:5164/api/Aeroporto').subscribe({
-      next: response => this.aeroportos = response,
-      error: error => console.log(error),
-      complete: () => console.log("Request has completed")
-    })
-  }
+  }  
 
   setCurrentUsuario(){
     const usuarioString = localStorage.getItem('usuario');

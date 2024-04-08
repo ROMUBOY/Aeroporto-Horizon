@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
+using API.DTOs;
+using API.Enums;
+using API.Extensions;
 
 namespace API.Controllers
-{
-    [AllowAnonymous]
+{    
     public class VooController : BaseController
     {
         public VooController(DataContext context) : base (context)
@@ -20,40 +22,94 @@ namespace API.Controllers
 
         // GET: api/Voo
         [HttpGet]        
-        public async Task<ActionResult<IEnumerable<Voo>>> ListarVoos()
+        public async Task<ActionResult<IEnumerable<VooDto>>> ListarVoos()
         {
             DateTime dataAtual = DateTime.Now;
-            return await this._context.Voos.Where(v => v.Partida > dataAtual).ToListAsync();
+            return await this._context.Voos
+                             .Select(v => new VooDto{
+                                Id = v.Id,
+                                Partida = v.Partida,     
+                                Chegada = v.Chegada,                           
+                                VooClasse = EnumExtension.GetEnumDescription((VooClasse)v.VooClasse),
+                                QuantidadeAcentos = v.QuantidadeAcentos,
+                                Valor = v.Valor,
+                                CidadePartida = v.Aeroporto.Cidade,
+                                CidadeDestino = v.AeroportoChegada.Cidade
+                             })
+                             .Where(v => v.Partida > dataAtual)
+                             .ToListAsync();
         }
 
 
         [HttpGet("Disponiveis")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Voo>>> ListarVoosDisponiveis()
+        public async Task<ActionResult<IEnumerable<VooDto>>> ListarVoosDisponiveis()
         {
             DateTime dataAtual = DateTime.Now;
-            return await this._context.Voos.Where(v => v.QuantidadeAcentos > 0 && v.Partida > dataAtual).ToListAsync();
+            return await this._context.Voos.Select(v => new VooDto{
+                                Id = v.Id,
+                                Partida = v.Partida,     
+                                Chegada = v.Chegada,                           
+                                VooClasse = EnumExtension.GetEnumDescription((VooClasse)v.VooClasse),
+                                QuantidadeAcentos = v.QuantidadeAcentos,
+                                Valor = v.Valor,
+                                CidadePartida = v.Aeroporto.Cidade,
+                                CidadeDestino = v.AeroportoChegada.Cidade
+                             })
+                             .Where(v => v.QuantidadeAcentos > 0 && v.Partida > dataAtual)
+                             .ToListAsync();
         }
 
         // GET: api/Voo/Passageiros/5
         [HttpGet("Passageiros/{id}")]        
-        public async Task<ActionResult<IEnumerable<string>>> ListarVooPassageiros(int id)
+        public async Task<ActionResult<IEnumerable<PassageiroDto>>> ListarVooPassageiros(int id)
         {
-            return await this._context.Passagens.Where(P => P.VooId == id).Select(p => p.Nome).ToListAsync();
+            return await this._context.Passagens
+                             .Where(P => P.VooId == id)
+                             .Select(p => new PassageiroDto
+                             {
+                                Nome = p.Nome, 
+                                Cpf = p.Cpf
+                            })
+                             .ToListAsync();
         }
 
         // GET: api/Voo/valor
         [HttpGet("Filtros")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Voo>>> ListarVoos(DateTime partida, DateTime chegada,int aeroportoId,float valor = 0f)
+        public async Task<ActionResult<IEnumerable<Voo>>> ListarVoos(DateTime partida , int aeroportoId, float valor = 0f)
         {
             return await this._context.Voos.Where(
-                                        v => v.Partida == partida &&
-                                        v.Chegada == partida && 
+                                        v => v.Partida == partida &&                                        
                                         (v.AeroportoId == aeroportoId || aeroportoId == 0) &&
                                         v.QuantidadeAcentos > 0 &&
                                         (v.Valor < valor || valor == 0f)
                                     ).ToListAsync();
+        }
+
+        // GET: api/Voo/5
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<VooDto>> RetornarPassagem(int id)
+        {
+            var voo = await this._context.Voos
+                                .Select(v => new VooDto{
+                                    Id = v.Id,
+                                    Partida = v.Partida,     
+                                    Chegada = v.Chegada,                           
+                                    VooClasse = EnumExtension.GetEnumDescription((VooClasse)v.VooClasse),
+                                    QuantidadeAcentos = v.QuantidadeAcentos,
+                                    Valor = v.Valor,
+                                    CidadePartida = v.Aeroporto.Cidade,
+                                    CidadeDestino = v.AeroportoChegada.Cidade
+                                }).Where(v => v.Id == id).FirstOrDefaultAsync();
+
+            if (voo == null)
+            {
+                return NotFound();
+            }
+
+            return voo;
         }
 
         // PUT: api/Voo/5

@@ -1,1 +1,20 @@
-<p>aeroporto-list works!</p>
+<div class="table-responsive small">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>          
+          <th scope="col">Código</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Cidade</th>                              
+          <th scope="col">IATA</th> 
+        </tr>
+      </thead>
+      <tbody>        
+        <tr *ngFor="let aeroporto of aeroportos">
+            <td>{{aeroporto.id}}</td>
+            <td>{{aeroporto.nome}}</td>
+            <td>{{aeroporto.cidade}}</td>            
+            <td>{{aeroporto.iata}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

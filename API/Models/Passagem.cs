@@ -27,7 +27,7 @@ namespace API.Models
         [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "O e-mail não é válido.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Campo Voo é obrigatório")]        
+        [Required(ErrorMessage = "Campo valor é obrigatório")]
         public float Valor { get; set; }
 
         [Required(ErrorMessage = "Campo Voo é obrigatório")]        

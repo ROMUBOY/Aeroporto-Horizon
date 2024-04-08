@@ -1,0 +1,34 @@
+<div class="row" *ngIf="voucher">
+    <div class="col-4">
+        <div class="card">            
+            <div class="card-body">
+                <div>
+                    <strong>Destino:</strong>
+                    <p>{{voucher.cidadeDestino}}</p>
+                </div>                
+                <div>
+                    <strong>partida:</strong>
+                    <p>{{voucher.cidadePartida }}</p>                    
+                </div>
+                <div>                    
+                    <p>{{voucher.partida | date: 'dd/MM/yyyy'}} - {{voucher.partida | date: 'HH : mm'}}</p>
+                </div>
+                <div>
+                    <strong>Previsão de chegada:</strong>
+                    <p>{{voucher.chegada| date: 'dd/MM/yyyy'}} - {{voucher.chegada| date: 'HH : mm'}}</p>
+                </div>
+                <div>
+                    <strong>Passageiro:</strong>
+                    <p>{{voucher.nome}}</p>
+                </div>
+                <div>
+                    <strong>CPF:</strong>
+                    <p>{{voucher.cpf}}</p>
+                </div>                
+            </div>   
+                       
+            
+        </div>
+    </div>    
+</div>
+<div class="row" *ngIf="!voucher"><h1>Vouchers ficam disponíveis 5 horas antes do voo</h1></div>

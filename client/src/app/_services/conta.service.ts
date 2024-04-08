@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Usuario } from '../_models/usuario';
 import { BehaviorSubject, map } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContaService {
-  baseUrl = 'http://localhost:5164/api/'
+  baseUrl = environment.apiUrl;
   private currentUsuarioSource = new BehaviorSubject<Usuario | null>(null);
   currentUsuario$ = this.currentUsuarioSource.asObservable();
 

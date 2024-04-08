@@ -1,0 +1,17 @@
+<div class="card mb-4" *ngIf="voo">    
+    <div class="card-body p-1">
+        <h6 class="card-title text mb-1">
+            Destino: {{voo.cidadeDestino}} - {{voo.partida | date: 'dd/MM/yyyy hh:mm'}}
+        </h6>
+        <h6 class="card-title text mb-1">
+            De:{{voo.cidadePartida}}
+        </h6>
+
+        <p class="card-text text-muted text">{{voo.vooClasse}}</p>
+        <p class="card-text text-muted text">BRL {{voo.valor}}</p>
+
+        <button routerLink="/voos/{{voo.id}}" class="btn btn-primary"><i class="fa bi-airolane">Comprar</i></button>
+        <button *ngIf="(contaService.currentUsuario$ | async)" routerLink="/voos/{{voo.id}}" class="btn btn-primary"><i class="fa bi-airolane">Editar</i></button>
+        <button *ngIf="(contaService.currentUsuario$ | async)" routerLink="/voos/passageiros/{{voo.id}}" class="btn btn-primary"><i class="fa bi-airolane">Passageiros</i></button>
+    </div>
+</div>

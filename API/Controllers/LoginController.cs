@@ -27,15 +27,26 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<UsuarioDto>> Login(LoginDto loginDto)
         {
-            var usuario = await this._context.Usuarios.SingleOrDefaultAsync(x =>
-            x.Email == loginDto.Email);
+            var usuarioInfo = await this._context.Usuarios
+                    .Select(u => new
+                    {
+                        Email = u.Email,
+                        Senha = u.Senha
+                    })
+                    .SingleOrDefaultAsync(x =>x.Email == loginDto.Email);
 
-            if(usuario == null) return Unauthorized("Email ou senha incorreto.");
+            if(usuarioInfo == null) return Unauthorized("Email ou senha incorreto.");
 
-            if(usuario.Senha != loginDto.Senha)
+            if(usuarioInfo.Senha != loginDto.Senha)
             {
                 return Unauthorized("Email ou senha incorreto.");
             }
+
+            Usuario usuario = new Usuario
+            {
+                Email = usuarioInfo.Email,
+                Senha = usuarioInfo.Senha
+            };
 
             return new UsuarioDto
             {

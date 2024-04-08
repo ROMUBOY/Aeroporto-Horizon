@@ -1,17 +1,27 @@
 <div class="container mt-5">
-    <div *ngIf="!compraPassagemMode" style="text-align: center;">
+    <div *ngIf="!checarPassagemMode" style="text-align: center;">
         <h1>Voe conosco</h1>
         <p class="lead">Venha ter o melhor voo de todos!</p>
         <div class="text-center">
             <button (click)="compraPassagemToggle()" class="btn btn-primary btn-lg me-2">Compra passagem</button>
-            <button class="btn btn-primary btn-lg">Checar suas passagens</button>
+            <button (click)="checarPassagensporCpfToggle()" class="btn btn-primary btn-lg">Checar suas passagens</button>
         </div>
     </div>
 
-    <div *ngIf="compraPassagemMode" class="container">
+    <div *ngIf="checarPassagemMode" class="container">
         <div class="row justify-content-center">
             <div class="col-4">
-                <app-voo-list></app-voo-list>
+                <form #loginForm="ngForm"  (ngSubmit)="redirectPassagemList()" autocomplete="off">                    
+                    <div>
+                      <input 
+                      name="cpf"
+                      [(ngModel)]="model.cpf"
+                      class="form-control me-2"
+                      class="form-control me-2" 
+                      type="text" placeholder="CPF">
+                    </div>    
+                    <button type="submit" class="btn btn-primary btn-lg">Checar suas passagens</button>                  
+                  </form>
             </div>            
         </div>
     </div>

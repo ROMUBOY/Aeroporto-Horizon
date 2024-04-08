@@ -9,6 +9,7 @@ using API.Data;
 using API.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using API.DTOs;
 
 namespace API.Controllers
 {        
@@ -26,19 +27,48 @@ namespace API.Controllers
             return await this._context.Passagens.ToListAsync();
         }
 
-        // GET: api/Passagem/00000000000
+        // GET: api/Passagem/Passageiro/00000000000
         [HttpGet("Passageiro/{cpf}")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Passagem>>> ListarPassagensPassageiro(string cpf)
-        {
-            return await this._context.Passagens.Where(p => p.Cpf == cpf).ToListAsync();
+        public async Task<ActionResult<IEnumerable<VoucherDto>>> ListarPassagensPassageiro(string cpf)
+        {            
+            return await this._context.Passagens
+                            .Select(p => new VoucherDto{
+                                Id = p.Id,
+                                Nome = p.Nome,
+                                Cpf = p.Cpf,
+                                Partida = p.Voo.Partida,
+                                Chegada = p.Voo.Chegada,
+                                CidadePartida = p.Voo.Aeroporto.Cidade,
+                                CidadeDestino = p.Voo.AeroportoChegada.Cidade,
+                            }).Where(p => p.Cpf == cpf).ToListAsync();
         }
 
         // GET: api/Passagem/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Passagem>> RetornarPassagem(int id)
+        [AllowAnonymous]
+        public async Task<ActionResult<VoucherDto>> RetornarPassagem(int id)
         {
-            var passagem = await this._context.Passagens.FindAsync(id);
+            DateTime dataDePassagem = await this._context.Passagens.Where(p=> p.Id == id).Select(p => p.Voo.Partida).FirstOrDefaultAsync();
+            var dtnow = DateTime.Now;
+            
+
+            TimeSpan ts = dataDePassagem - dtnow;
+
+            if(ts.Hours > 5)
+            {
+                return BadRequest("Vouche disponível apenas 5 horas antes do voo");
+            }
+
+            var passagem = await this._context.Passagens.Select(p => new VoucherDto{
+                                Id = p.Id,
+                                Nome = p.Nome,
+                                Cpf = p.Cpf,
+                                Partida = p.Voo.Partida,
+                                Chegada = p.Voo.Chegada,
+                                CidadePartida = p.Voo.Aeroporto.Cidade,
+                                CidadeDestino = p.Voo.AeroportoChegada.Cidade,
+                            }).FirstOrDefaultAsync(p => p.Id == id);
 
             if (passagem == null)
             {
@@ -112,7 +142,10 @@ namespace API.Controllers
 
             passagem.Valor = CalcularValorPassagem(passagem, voo);
 
-            passagem.BagagemCodigo = GerarCodigoBagagem();
+            if(passagem.BagagemCodigo != ""){
+                passagem.BagagemCodigo = GerarCodigoBagagem();
+                passagem.Valor += passagem.Valor * 0.1f;
+            } 
 
             this._context.Passagens.Add(passagem);
             await this._context.SaveChangesAsync();

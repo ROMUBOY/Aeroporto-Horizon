@@ -10,6 +10,9 @@ import { VooListComponent } from './voo/voo-list/voo-list.component';
 import { authGuard } from './_guards/auth.guard';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { VooDetailComponent } from './voo/voo-detail/voo-detail.component';
+import { PassagemVoucherComponent } from './passagem/passagem-voucher/passagem-voucher.component';
+import { VooPassageirosComponent } from './voo/voo-passageiros/voo-passageiros.component';
 
 const routes: Routes = [
   {path: '', component : HomeComponent},
@@ -17,14 +20,17 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
-      {path: 'aeroportos', component : AeroportoListComponent},
-      {path: 'passagens/:cpf', component : PassagemListComponent},
-      {path: 'passagem/register', component : PassagemRegisterComponent},
-      {path: 'passagem/delete', component : PassagemDeleteComponent},
-      {path: 'voos', component : VooListComponent},
-      {path: 'voo/register', component : VooRegisterComponent}
+      {path: 'aeroportos', component : AeroportoListComponent},      
+      {path: 'passagens/register', component : PassagemRegisterComponent},
+      {path: 'passagens/delete/:id', component : PassagemDeleteComponent},      
+      {path: 'voos/register', component : VooRegisterComponent},
+      {path: 'voos/passageiros/:id', component : VooPassageirosComponent}  
     ]
   },  
+  {path: 'voos/:id', component : VooDetailComponent},
+  {path: 'voos', component : VooListComponent},
+  {path: 'passagens/:cpf', component : PassagemListComponent},
+  {path: 'voucher/:id', component : PassagemVoucherComponent},
   {path: 'not-found', component: NotFoundComponent},
   {path: 'server-error', component: ServerErrorComponent},
   {path: '**', component: NotFoundComponent, pathMatch: 'full'},

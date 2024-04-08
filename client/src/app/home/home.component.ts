@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -7,15 +8,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  compraPassagemMode = false;
 
-  constructor() {}
+  model : any = {};
+  checarPassagemMode = false;
+
+  constructor(private router : Router) {}
 
   ngOnInit(): void {
     
   }
 
   compraPassagemToggle(){
-    this.compraPassagemMode = !this.compraPassagemMode;
+    this.router.navigateByUrl('/voos');
+  }
+
+  checarPassagensporCpfToggle(){
+    this.checarPassagemMode = true;
+  }
+
+  redirectPassagemList(){    
+    if(!this.model) return;
+
+    this.checarPassagemMode = false;  
+    
+    this.router.navigateByUrl('/passagens/' + this.model.cpf);
   }
 }
